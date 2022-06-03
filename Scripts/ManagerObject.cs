@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
-namespace Omnilatent.SceneManager
+namespace Omnilatent.ScenesManager
 {
     public class ManagerObject : MonoBehaviour
     {
@@ -14,7 +15,53 @@ namespace Omnilatent.SceneManager
             ShieldFadeOut,
             SCENE_LOADING
         }
+
+        // Shield & Transition Vars
+        bool m_ShieldActive;
         State m_State;
+        public State GetState() { return m_State; }
+        public bool ShieldActive
+        {
+            get
+            {
+                return m_ShieldActive;
+            }
+            protected set
+            {
+                m_ShieldActive = value;
+                m_Shield.gameObject.SetActive(m_ShieldActive);
+            }
+        }
+
+        // Shield & Transition
+        [SerializeField] Image m_Shield; //block interaction
+        [SerializeField] SceneTransitionShield sceneTransitionShield;
+        [SerializeField] Color m_ShieldColor = Color.black;
+
+        // Scene gradually appear
+        public void FadeInScene()
+        {
+            if (this != null)
+            {
+                if (Manager.SceneFadeDuration == 0)
+                {
+                    ShieldOff();
+                }
+                else
+                {
+                    ShieldActive = true;
+                    sceneTransitionShield.Hide();
+                    m_State = State.SHIELD_FADE_IN;
+                    StartCoroutine(CoFadeInScene());
+                }
+            }
+        }
+
+        IEnumerator CoFadeInScene()
+        {
+            yield return new WaitForSecondsRealtime(Manager.SceneFadeDuration);
+            OnFadedIn();
+        }
 
         // Scene gradually disappear
         public void FadeOutScene()
@@ -28,16 +75,51 @@ namespace Omnilatent.SceneManager
                 }
                 else
                 {
-                    Active = true;
-
-                    m_StartAlpha = 0;
-                    m_EndAlpha = 1;
-
-                    this.m_AnimationDuration = Manager.SceneFadeDuration;
-                    this.Play();
-
+                    ShieldActive = true;
+                    sceneTransitionShield.Show();
                     m_State = State.ShieldFadeOut;
+                    StartCoroutine(CoFadeOutScene());
                 }
+            }
+        }
+
+        IEnumerator CoFadeOutScene()
+        {
+            yield return new WaitForSecondsRealtime(Manager.SceneFadeDuration);
+            OnFadedOut();
+        }
+
+        public void OnFadedIn()
+        {
+            if (this != null)
+            {
+                m_State = State.SHIELD_OFF;
+                ShieldActive = false;
+                Manager.OnFadedIn();
+            }
+        }
+
+        public void OnFadedOut()
+        {
+            m_State = State.SCENE_LOADING;
+            Manager.OnFadedOut();
+        }
+
+        public void ShieldOn()
+        {
+            if (m_State == State.SHIELD_OFF)
+            {
+                m_State = State.SHIELD_ON;
+                ShieldActive = true;
+            }
+        }
+
+        public void ShieldOff()
+        {
+            if (m_State == State.SHIELD_ON)
+            {
+                m_State = State.SHIELD_OFF;
+                ShieldActive = false;
             }
         }
     }
