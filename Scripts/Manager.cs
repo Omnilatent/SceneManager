@@ -18,6 +18,9 @@ namespace Omnilatent.ScenesManager
         static float sceneFadeDuration;
         public static float SceneFadeDuration { get => sceneFadeDuration; set => sceneFadeDuration = value; }
 
+        //Store temporary data passing between scenes
+        static Dictionary<string, object> interSceneDatas = new Dictionary<string, object>();
+
         static Manager()
         {
             Application.targetFrameRate = 60;
@@ -33,6 +36,18 @@ namespace Omnilatent.ScenesManager
 
         public static void OnSceneLoaded(Controller sender)
         {
+            if (string.IsNullOrEmpty(m_MainSceneName) || sender.SceneName() == m_MainSceneName)
+            {
+                m_MainController = sender;
+            }
+
+            object data;
+            if (interSceneDatas.TryGetValue(sender.SceneName(), out data))
+            {
+                interSceneDatas.Remove(sender.SceneName());
+            };
+            sender.OnActive(data);
+
             // Fade
             Object.FadeInScene();
         }
@@ -41,6 +56,10 @@ namespace Omnilatent.ScenesManager
         {
             m_MainSceneName = sceneName;
             Object.FadeOutScene();
+            if (data != null)
+            {
+                interSceneDatas.Add(sceneName, data);
+            }
         }
 
         public static void LoadAsync(string sceneName, Action onSceneLoaded, object data)
@@ -61,6 +80,10 @@ namespace Omnilatent.ScenesManager
             }
 
             SceneManager.LoadScene(m_MainSceneName, LoadSceneMode.Single);
+        }
+
+        public static void Close()
+        {
         }
     }
 }
