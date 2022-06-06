@@ -2,15 +2,23 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.Rendering.Universal;
+using UnityEngine.UI;
 
 namespace Omnilatent.ScenesManager
 {
     public abstract class Controller : MonoBehaviour
     {
         [SerializeField] SceneAnimation sceneAnimation;
+        [SerializeField] protected Canvas m_Canvas;
+        public Canvas Canvas { get => m_Canvas; set => m_Canvas = value; }
+
+        [SerializeField] protected Camera m_Camera;
+        public Camera Camera { get => m_Camera; set => m_Camera = value; }
+
         Manager.SceneData sceneData;
         public Manager.SceneData SceneData { get => sceneData; set => sceneData = value; }
+        GameObject m_Shield;
 
         protected virtual void Awake()
         {
@@ -36,6 +44,49 @@ namespace Omnilatent.ScenesManager
         public virtual void Show()
         {
             sceneAnimation.Show();
+        }
+
+        public void CreateShield()
+        {
+            if (m_Shield == null && m_Canvas.sortingOrder > 0)
+            {
+                m_Shield = new GameObject("Shield");
+                m_Shield.layer = LayerMask.NameToLayer("UI");
+
+                Image image = m_Shield.AddComponent<Image>();
+                image.color = Manager.ShieldColor;
+
+                Transform t = m_Shield.transform;
+                t.SetParent(m_Canvas.transform);
+                t.SetSiblingIndex(0);
+                t.localScale = Vector3.one;
+                t.localPosition = new Vector3(t.localPosition.x, t.localPosition.y, 0);
+
+                RectTransform rt = t.GetComponent<RectTransform>();
+                rt.anchorMin = Vector2.zero;
+                rt.anchorMax = Vector2.one;
+                rt.pivot = new Vector2(0.5f, 0.5f);
+                rt.offsetMax = new Vector2(2, 2);
+                rt.offsetMin = new Vector2(-2, -2);
+            }
+        }
+
+        public void SetupCanvas(int sortingOrder)
+        {
+            if (m_Canvas == null)
+            {
+                m_Canvas = transform.GetComponentInChildren<Canvas>(true);
+            }
+            if (m_Canvas.worldCamera == null)
+            {
+                m_Canvas.sortingOrder = sortingOrder;
+                m_Canvas.worldCamera = Manager.Object.UICamera;
+            }
+
+            if (Camera != null)
+            {
+                Camera.GetComponent<UniversalAdditionalCameraData>().cameraStack.Add(Manager.Object.UICamera);
+            }
         }
 
         /// <summary>

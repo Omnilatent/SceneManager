@@ -38,7 +38,13 @@ namespace Omnilatent.ScenesManager
         [SerializeField] Image m_Shield; //block interaction
         [SerializeField] SceneTransitionShield sceneTransitionShield;
         [SerializeField] Color m_ShieldColor = Color.black;
+        [SerializeField] Camera m_UiCamera;
         bool createPersistentEventSystem = true;
+
+        public Camera UICamera
+        {
+            get { return m_UiCamera; }
+        }
 
         private void Awake()
         {
