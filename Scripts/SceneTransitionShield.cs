@@ -1,4 +1,5 @@
 using DG.Tweening;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -30,6 +31,7 @@ namespace Omnilatent.ScenesManager
         public void Show()
         {
             Init();
+            gameObject.SetActive(true);
             m_Image.color = startColor;
             m_Image.DOColor(endColor, Manager.SceneFadeDuration);
         }
@@ -38,7 +40,12 @@ namespace Omnilatent.ScenesManager
         {
             Init();
             m_Image.color = endColor;
-            m_Image.DOColor(startColor, Manager.SceneFadeDuration);
+            m_Image.DOColor(startColor, Manager.SceneFadeDuration).OnComplete(OnFadeComplete);
+        }
+
+        private void OnFadeComplete()
+        {
+            gameObject.SetActive(false);
         }
     }
 }

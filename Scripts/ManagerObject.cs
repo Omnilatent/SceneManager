@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace Omnilatent.ScenesManager
@@ -37,6 +38,18 @@ namespace Omnilatent.ScenesManager
         [SerializeField] Image m_Shield; //block interaction
         [SerializeField] SceneTransitionShield sceneTransitionShield;
         [SerializeField] Color m_ShieldColor = Color.black;
+        bool createPersistentEventSystem = true;
+
+        private void Awake()
+        {
+            DontDestroyOnLoad(gameObject);
+            if (createPersistentEventSystem)
+            {
+                EventSystem prefab = Resources.Load<EventSystem>("PersistentEventSystem");
+                var eventSystem = Instantiate(prefab);
+                DontDestroyOnLoad(eventSystem.gameObject);
+            }
+        }
 
         // Scene gradually appear
         public void FadeInScene()
