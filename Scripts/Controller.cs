@@ -8,8 +8,13 @@ namespace Omnilatent.ScenesManager
 {
     public abstract class Controller : MonoBehaviour
     {
+        [SerializeField] SceneAnimation sceneAnimation;
+        Manager.SceneData sceneData;
+        public Manager.SceneData SceneData { get => sceneData; set => sceneData = value; }
+
         protected virtual void Awake()
         {
+            sceneAnimation.Controller = this;
             Manager.OnSceneLoaded(this);
         }
 
@@ -26,6 +31,11 @@ namespace Omnilatent.ScenesManager
         /// <param name="data">Data.</param>
         public virtual void OnActive(object data)
         {
+        }
+
+        public virtual void Show()
+        {
+            sceneAnimation.Show();
         }
 
         /// <summary>
@@ -48,7 +58,7 @@ namespace Omnilatent.ScenesManager
         /// </summary>
         public virtual void OnKeyBack()
         {
-            Manager.Close();
+            Manager.Close(this);
         }
     }
 }

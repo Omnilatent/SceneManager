@@ -135,5 +135,31 @@ namespace Omnilatent.ScenesManager
                 ShieldActive = false;
             }
         }
+        protected void Update()
+        {
+#if UNITY_EDITOR || UNITY_ANDROID || UNITY_STANDALONE
+            UpdateInput();
+#endif
+        }
+
+        void UpdateInput()
+        {
+#if ENABLE_LEGACY_INPUT_MANAGER
+            if (Input.GetKeyDown(KeyCode.Escape))
+#else
+            if (Keyboard.current is Keyboard keyboard)
+                if (keyboard.escapeKey.wasPressedThisFrame)
+#endif
+            {
+                if (!ShieldActive)
+                {
+                    Controller controller = Manager.TopController();
+                    if (controller != null)
+                    {
+                        controller.OnKeyBack();
+                    }
+                }
+            }
+        }
     }
 }
