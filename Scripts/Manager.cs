@@ -180,6 +180,21 @@ namespace Omnilatent.ScenesManager
 
         public static void Close(Controller sender)
         {
+            Object.ShieldOn();
+            sender.Hide();
+        }
+
+        public static void OnHidden(Controller sender)
+        {
+            sender.OnHidden();
+            sender.SceneData.onHidden?.Invoke();
+            Unload(sender);
+            Object.ShieldOff();
+        }
+
+        static void Unload(Controller controller)
+        {
+            SceneManager.UnloadSceneAsync(controller.SceneData.scene);
         }
     }
 }

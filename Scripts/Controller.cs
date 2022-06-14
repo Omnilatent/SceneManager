@@ -22,7 +22,7 @@ namespace Omnilatent.ScenesManager
 
         protected virtual void Awake()
         {
-            sceneAnimation.Controller = this;
+            //sceneAnimation.Controller = this;
             Manager.OnSceneLoaded(this);
         }
 
@@ -43,7 +43,12 @@ namespace Omnilatent.ScenesManager
 
         public virtual void Show()
         {
-            sceneAnimation.Show();
+            sceneAnimation.Show(OnEndShowAnim);
+        }
+
+        private void OnEndShowAnim()
+        {
+            Manager.OnShown(this);
         }
 
         public void CreateShield()
@@ -110,6 +115,23 @@ namespace Omnilatent.ScenesManager
         public virtual void OnKeyBack()
         {
             Manager.Close(this);
+        }
+
+        public void Hide()
+        {
+            sceneAnimation.Hide(OnEndHideAnim);
+        }
+
+        private void OnEndHideAnim()
+        {
+            Manager.OnHidden(this);
+        }
+
+        /// <summary>
+        /// Called when scene on top is hidden and this scene is in focus
+        /// </summary>
+        public virtual void OnReFocus()
+        {
         }
     }
 }

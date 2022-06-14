@@ -8,22 +8,17 @@ namespace Omnilatent.ScenesManager
 {
     public class SceneAnimation : MonoBehaviour
     {
-        [SerializeField] Controller m_Controller;
+        //[SerializeField] Controller m_Controller;
         [SerializeField] SimpleAnimObject animObject;
 
-        public Controller Controller { get => m_Controller; set => m_Controller = value; }
+        //public Controller Controller { get => m_Controller; set => m_Controller = value; }
 
-        public void Show()
+        public void Show(Action onEndShow)
         {
-            animObject.Show(OnEndShow);
+            animObject.Show(onEndShow);
         }
 
-        private void OnEndShow()
-        {
-            Manager.OnShown(m_Controller);
-        }
-
-        public void Hide()
+        public void Hide(Action onEndHide)
         {
             animObject.Hide();
         }
