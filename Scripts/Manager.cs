@@ -37,7 +37,8 @@ namespace Omnilatent.ScenesManager
         static float sceneFadeDuration;
         public static float SceneFadeDuration { get => sceneFadeDuration; set => sceneFadeDuration = value; }
 
-        static Stack<Controller> m_ControllerStack = new Stack<Controller>();
+        static LinkedList<Controller> m_ControllerList = new LinkedList<Controller>();
+
         //Store temporary data passing between scenes
         static Dictionary<string, SceneData> interSceneDatas = new Dictionary<string, SceneData>();
 
@@ -61,7 +62,7 @@ namespace Omnilatent.ScenesManager
             // Single Mode automatically destroy all scenes, so we have to clear the stack.
             if (mode == LoadSceneMode.Single)
             {
-                m_ControllerStack.Clear();
+                m_ControllerList.Clear();
             }
         }
 
@@ -72,12 +73,13 @@ namespace Omnilatent.ScenesManager
                 m_MainController = sender;
             }
 
-            m_ControllerStack.Push(sender);
+            m_ControllerList.AddFirst(sender);
 
             SceneData data = GetSceneData(sender.SceneName(), true);
+            sender.SceneData = data;
             sender.OnActive(data.data);
             // Animation
-            if (m_ControllerStack.Count == 1)
+            if (m_ControllerList.Count == 1)
             {
                 // Own Camera
                 /*if (sender.Camera != null)
@@ -170,9 +172,9 @@ namespace Omnilatent.ScenesManager
 
         public static Controller TopController()
         {
-            if (m_ControllerStack.Count > 0)
+            if (m_ControllerList.Count > 0)
             {
-                return m_ControllerStack.Peek();
+                return m_ControllerList.First.Value;
             }
 
             return null;
@@ -180,6 +182,7 @@ namespace Omnilatent.ScenesManager
 
         public static void Close(Controller sender)
         {
+            m_ControllerList.Remove(sender);
             Object.ShieldOn();
             sender.Hide();
         }
@@ -189,6 +192,7 @@ namespace Omnilatent.ScenesManager
             sender.OnHidden();
             sender.SceneData.onHidden?.Invoke();
             Unload(sender);
+            TopController().OnReFocus();
             Object.ShieldOff();
         }
 

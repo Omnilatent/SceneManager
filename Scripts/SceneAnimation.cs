@@ -20,7 +20,7 @@ namespace Omnilatent.ScenesManager
 
         public void Hide(Action onEndHide)
         {
-            animObject.Hide();
+            animObject.Hide(onEndHide);
         }
     }
 }
