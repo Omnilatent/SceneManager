@@ -14,16 +14,18 @@ namespace Omnilatent.ScenesManager
             public Action onShown;
             public Action onHidden;
             public Scene scene;
+            public LoadSceneMode loadSceneMode = LoadSceneMode.Single; //popup or single scene
 
             public SceneData()
             {
             }
 
-            public SceneData(object data, Action onShown, Action onHidden)
+            public SceneData(object data, Action onShown, Action onHidden, LoadSceneMode loadSceneMode)
             {
                 this.data = data;
                 this.onShown = onShown;
                 this.onHidden = onHidden;
+                this.loadSceneMode = loadSceneMode;
             }
         }
 
@@ -59,11 +61,6 @@ namespace Omnilatent.ScenesManager
         {
             var data = GetSceneData(scene.name, true);
             data.scene = scene;
-            // Single Mode automatically destroy all scenes, so we have to clear the stack.
-            if (mode == LoadSceneMode.Single)
-            {
-                m_ControllerList.Clear();
-            }
         }
 
         public static void OnSceneLoaded(Controller sender)
@@ -73,9 +70,16 @@ namespace Omnilatent.ScenesManager
                 m_MainController = sender;
             }
 
+            SceneData data = GetSceneData(sender.SceneName(), true);
+
+            // Single Mode automatically destroy all scenes, so we have to clear the list.
+            if (data.loadSceneMode == LoadSceneMode.Single)
+            {
+                m_ControllerList.Clear();
+            }
+
             m_ControllerList.AddFirst(sender);
 
-            SceneData data = GetSceneData(sender.SceneName(), true);
             sender.SceneData = data;
             sender.OnActive(data.data);
             // Animation
@@ -105,15 +109,23 @@ namespace Omnilatent.ScenesManager
             }
         }
 
+        /// <summary>
+        /// Add inter-scene data to dictionary. If a scene data for that scene already exist, overwrite it with new data.
+        /// </summary>
         static void AddSceneData(string sceneName, SceneData sceneData)
         {
-            interSceneDatas.Add(sceneName, sceneData);
+            if (interSceneDatas.ContainsKey(sceneName))
+            {
+                interSceneDatas[sceneName] = sceneData;
+            }
+            else interSceneDatas.Add(sceneName, sceneData);
         }
 
         static SceneData GetSceneData(string sceneName, bool createIfNotExist)
         {
             if (!interSceneDatas.TryGetValue(sceneName, out var sceneData) && createIfNotExist)
             {
+                //Debug.Log($"Scene data for '{sceneName}' does not exist, new data will be created.");
                 AddSceneData(sceneName, new SceneData());
                 sceneData = interSceneDatas[sceneName];
             }
@@ -124,8 +136,8 @@ namespace Omnilatent.ScenesManager
         {
             m_MainSceneName = sceneName;
             Object.FadeOutScene();
-            SceneData sceneData = new SceneData(data, null, null);
-            interSceneDatas.Add(sceneName, sceneData);
+            SceneData sceneData = new SceneData(data, null, null, LoadSceneMode.Single);
+            AddSceneData(sceneName, sceneData);
         }
 
         public static void LoadAsync(string sceneName, Action onSceneLoaded, object data)
@@ -137,8 +149,8 @@ namespace Omnilatent.ScenesManager
         {
             Object.ShieldOn();
             SceneManager.LoadScene(sceneName, LoadSceneMode.Additive);
-            SceneData sceneData = new SceneData(data, onShown, onHidden);
-            interSceneDatas.Add(sceneName, sceneData);
+            SceneData sceneData = new SceneData(data, onShown, onHidden, LoadSceneMode.Additive);
+            AddSceneData(sceneName, sceneData);
         }
 
         public static void OnFadedIn()
