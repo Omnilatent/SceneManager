@@ -22,7 +22,6 @@ namespace Omnilatent.ScenesManager
 
         protected virtual void Awake()
         {
-            //sceneAnimation.Controller = this;
             Manager.OnSceneLoaded(this);
         }
 
@@ -43,7 +42,9 @@ namespace Omnilatent.ScenesManager
 
         public virtual void Show()
         {
-            sceneAnimation.Show(OnEndShowAnim);
+            if (sceneAnimation != null)
+                sceneAnimation.Show(OnEndShowAnim);
+            else OnEndShowAnim();
         }
 
         private void OnEndShowAnim()
@@ -119,7 +120,9 @@ namespace Omnilatent.ScenesManager
 
         public void Hide()
         {
-            sceneAnimation.Hide(OnEndHideAnim);
+            if (sceneAnimation != null)
+                sceneAnimation.Hide(OnEndHideAnim);
+            else OnEndHideAnim();
         }
 
         private void OnEndHideAnim()
@@ -132,6 +135,15 @@ namespace Omnilatent.ScenesManager
         /// </summary>
         public virtual void OnReFocus()
         {
+        }
+
+        protected virtual void OnValidate()
+        {
+            if (sceneAnimation == null)
+            {
+                sceneAnimation = GetComponentInChildren<SceneAnimation>();
+                Debug.Log($"Auto assign SceneAnimation '{sceneAnimation.gameObject.name}' to '{name}'");
+            }
         }
     }
 }
