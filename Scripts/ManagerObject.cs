@@ -38,6 +38,8 @@ namespace Omnilatent.ScenesManager
         [SerializeField] Image m_Shield; //block interaction
         [SerializeField] SceneTransitionShield sceneTransitionShield;
         [SerializeField] Color m_ShieldColor = Color.black;
+
+        [SerializeField] GameObject m_BgCamera;
         [SerializeField] Camera m_UiCamera;
         bool createPersistentEventSystem = true;
 
@@ -141,6 +143,15 @@ namespace Omnilatent.ScenesManager
                 ShieldActive = false;
             }
         }
+
+        public void ToggleBackgroundCamera(bool active)
+        {
+            if (m_BgCamera != null && m_BgCamera.gameObject != null)
+            {
+                m_BgCamera.gameObject.SetActive(active);
+            }
+        }
+
         protected void Update()
         {
 #if UNITY_EDITOR || UNITY_ANDROID || UNITY_STANDALONE

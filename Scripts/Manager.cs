@@ -81,20 +81,21 @@ namespace Omnilatent.ScenesManager
             m_ControllerList.AddFirst(sender);
 
             sender.SceneData = data;
+            sender.SetupCanvas(m_ControllerList.Count - 1);
             sender.OnActive(data.data);
             // Animation
             if (m_ControllerList.Count == 1)
             {
                 // Own Camera
-                /*if (sender.Camera != null)
+                if (sender.Camera != null)
                 {
-                    Object.ActivateBackgroundCamera(false);
+                    Object.ToggleBackgroundCamera(false);
 
-                    if (sender.Camera.GetComponent<CameraDestroyer>() == null)
+                    if (sender.Camera.GetComponent<ActivateManagerCameraOnDestroy>() == null)
                     {
-                        sender.Camera.gameObject.AddComponent<CameraDestroyer>();
+                        sender.Camera.gameObject.AddComponent<ActivateManagerCameraOnDestroy>();
                     }
-                }*/
+                }
 
                 // Main Scene
                 m_MainController = sender;
