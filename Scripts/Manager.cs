@@ -82,6 +82,7 @@ namespace Omnilatent.ScenesManager
 
             sender.SceneData = data;
             sender.SetupCanvas(m_ControllerList.Count - 1);
+            sender.CreateShield();
             sender.OnActive(data.data);
             // Animation
             if (m_ControllerList.Count == 1)
