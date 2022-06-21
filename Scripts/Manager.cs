@@ -16,6 +16,11 @@ namespace Omnilatent.ScenesManager
             public Action onHidden;
             public Scene scene;
             public LoadSceneMode loadSceneMode = LoadSceneMode.Single; //popup or single scene
+            public int canvasSortOrder;
+
+            public enum State { Loading, Loaded, Showing, Unloaded }
+            State sceneState;
+            public State SceneState => sceneState;
 
             public SceneData()
             {
@@ -28,6 +33,8 @@ namespace Omnilatent.ScenesManager
                 this.onHidden = onHidden;
                 this.loadSceneMode = loadSceneMode;
             }
+
+            public void SetCanvasSortOrder(int canvasOrder) { canvasSortOrder = canvasOrder; }
         }
 
         public static Color ShieldColor; //shield under the popup scene
@@ -88,7 +95,7 @@ namespace Omnilatent.ScenesManager
             m_ControllerList.AddFirst(sender);
 
             sender.SceneData = data;
-            sender.SetupCanvas(m_ControllerList.Count - 1);
+            sender.SetupCanvas(data.canvasSortOrder);
             sender.CreateShield();
             sender.OnActive(data.data);
             // Animation
@@ -157,11 +164,34 @@ namespace Omnilatent.ScenesManager
         public static void Add(string sceneName, object data = null, Action onShown = null, Action onHidden = null)
         {
             Object.ShieldOn();
-            SceneManager.LoadScene(sceneName, LoadSceneMode.Additive);
             SceneData sceneData = new SceneData(data, onShown, onHidden, LoadSceneMode.Additive);
+            sceneData.SetCanvasSortOrder(GetTopSceneSortOrder() + 1);
             AddSceneData(sceneName, sceneData);
+            SceneManager.LoadScene(sceneName, LoadSceneMode.Additive);
         }
 
+        public static async void LoadAsync(string sceneName, object data = null, Action onSceneLoaded = null, Action<float> onProgressUpdate = null)
+        {
+            loadingSceneAsync = true;
+            SceneData sceneData = new SceneData(data, null, null, LoadSceneMode.Single);
+            AddSceneData(sceneName, sceneData);
+            loadSceneOperation = SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Single);
+            loadSceneOperation.allowSceneActivation = false;
+            //loadSceneOperation.completed += (AsyncOperation asyncOp) => { OnSceneAsyncLoaded(sceneName, asyncOp, onSceneLoaded); };
+            while (loadSceneOperation.progress < 0.9f)
+            {
+                onProgressUpdate?.Invoke(loadSceneOperation.progress);
+                await Task.Delay(20);
+            }
+            OnSceneAsyncLoaded(sceneName, loadSceneOperation, onSceneLoaded);
+        }
+
+        static void OnSceneAsyncLoaded(string sceneName, AsyncOperation asyncOperation, Action onSceneLoaded)
+        {
+            onSceneLoaded?.Invoke();
+            m_MainSceneName = sceneName;
+            Object.FadeOutScene();
+        }
         public static void OnFadedIn()
         {
             m_MainController.OnShown();
@@ -198,29 +228,6 @@ namespace Omnilatent.ScenesManager
             Object.ShieldOff();
         }
 
-        public static async void LoadAsync(string sceneName, object data = null, Action onSceneLoaded = null, Action<float> onProgressUpdate = null)
-        {
-            loadingSceneAsync = true;
-            SceneData sceneData = new SceneData(data, null, null, LoadSceneMode.Single);
-            AddSceneData(sceneName, sceneData);
-            loadSceneOperation = SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Single);
-            loadSceneOperation.allowSceneActivation = false;
-            //loadSceneOperation.completed += (AsyncOperation asyncOp) => { OnSceneAsyncLoaded(sceneName, asyncOp, onSceneLoaded); };
-            while (loadSceneOperation.progress < 0.9f)
-            {
-                onProgressUpdate?.Invoke(loadSceneOperation.progress);
-                await Task.Delay(20);
-            }
-            OnSceneAsyncLoaded(sceneName, loadSceneOperation, onSceneLoaded);
-        }
-
-        static void OnSceneAsyncLoaded(string sceneName, AsyncOperation asyncOperation, Action onSceneLoaded)
-        {
-            onSceneLoaded?.Invoke();
-            m_MainSceneName = sceneName;
-            Object.FadeOutScene();
-        }
-
         public static Controller TopController()
         {
             if (m_ControllerList.Count > 0)
@@ -229,6 +236,20 @@ namespace Omnilatent.ScenesManager
             }
 
             return null;
+        }
+
+        public static int GetTopSceneSortOrder()
+        {
+            var topController = TopController();
+            if (topController != null)
+            {
+                var sceneData = GetSceneData(topController.SceneName(), false);
+                if (sceneData != null)
+                {
+                    return sceneData.canvasSortOrder;
+                }
+            }
+            return 0;
         }
 
         public static void Close(Controller sender)
@@ -249,6 +270,7 @@ namespace Omnilatent.ScenesManager
 
         static void Unload(Controller controller)
         {
+            interSceneDatas.Remove(controller.SceneName());
             SceneManager.UnloadSceneAsync(controller.SceneData.scene);
         }
     }
