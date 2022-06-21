@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -43,6 +44,12 @@ namespace Omnilatent.ScenesManager
 
         //Store temporary data passing between scenes
         static Dictionary<string, SceneData> interSceneDatas = new Dictionary<string, SceneData>();
+
+        //Load Scene Async
+        static bool loadingSceneAsync; //set to true when LoadAsync is used
+        static AsyncOperation loadSceneOperation;
+        //static Action<AsyncOperation> onNextSceneAsyncLoaded;
+        //static Action<float> onSceneLoadProgressUpdate;
 
         static Manager()
         {
@@ -134,17 +141,17 @@ namespace Omnilatent.ScenesManager
             return sceneData;
         }
 
+        /// <summary>
+        /// Fade out current scene and load new scene. Call <see cref="OnFadedOut()"/> after scene is faded out.
+        /// </summary>
+        /// <param name="data">Data pass to new scene</param>
         public static void Load(string sceneName, object data = null)
         {
+            loadingSceneAsync = false;
             m_MainSceneName = sceneName;
             Object.FadeOutScene();
             SceneData sceneData = new SceneData(data, null, null, LoadSceneMode.Single);
             AddSceneData(sceneName, sceneData);
-        }
-
-        public static void LoadAsync(string sceneName, Action onSceneLoaded, object data)
-        {
-
         }
 
         public static void Add(string sceneName, object data = null, Action onShown = null, Action onHidden = null)
@@ -167,7 +174,14 @@ namespace Omnilatent.ScenesManager
                 m_MainController.OnHidden();
             }
 
-            SceneManager.LoadScene(m_MainSceneName, LoadSceneMode.Single);
+            if (loadingSceneAsync)
+            {
+                loadSceneOperation.allowSceneActivation = true;
+                loadSceneOperation = null;
+                loadingSceneAsync = false;
+            }
+            else
+                SceneManager.LoadScene(m_MainSceneName, LoadSceneMode.Single);
         }
 
         public static void OnShown(Controller controller)
@@ -182,6 +196,29 @@ namespace Omnilatent.ScenesManager
             sceneData.onShown?.Invoke();
 
             Object.ShieldOff();
+        }
+
+        public static async void LoadAsync(string sceneName, object data = null, Action onSceneLoaded = null, Action<float> onProgressUpdate = null)
+        {
+            loadingSceneAsync = true;
+            SceneData sceneData = new SceneData(data, null, null, LoadSceneMode.Single);
+            AddSceneData(sceneName, sceneData);
+            loadSceneOperation = SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Single);
+            loadSceneOperation.allowSceneActivation = false;
+            //loadSceneOperation.completed += (AsyncOperation asyncOp) => { OnSceneAsyncLoaded(sceneName, asyncOp, onSceneLoaded); };
+            while (loadSceneOperation.progress < 0.9f)
+            {
+                onProgressUpdate?.Invoke(loadSceneOperation.progress);
+                await Task.Delay(20);
+            }
+            OnSceneAsyncLoaded(sceneName, loadSceneOperation, onSceneLoaded);
+        }
+
+        static void OnSceneAsyncLoaded(string sceneName, AsyncOperation asyncOperation, Action onSceneLoaded)
+        {
+            onSceneLoaded?.Invoke();
+            m_MainSceneName = sceneName;
+            Object.FadeOutScene();
         }
 
         public static Controller TopController()
