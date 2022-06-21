@@ -1,0 +1,29 @@
+{
+    "name": "Omnilatent.ScenesManager",
+    "rootNamespace": "",
+    "references": [
+        "GUID:85e4701422ee3014e9bc8252557326e2",
+        "GUID:15fc0a57446b3144c949da3e2b9737a9",
+        "GUID:3b73f1537421f3d418671a42cc8255ce"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [
+        {
+            "name": "com.unity.render-pipelines.universal",
+            "expression": "0.0",
+            "define": "USING_URP"
+        },
+        {
+            "name": "com.unity.render-pipelines.high-definition",
+            "expression": "0.0",
+            "define": "USING_HDRP"
+        }
+    ],
+    "noEngineReferences": false
+}

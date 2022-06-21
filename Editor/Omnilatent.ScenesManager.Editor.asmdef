@@ -1,0 +1,16 @@
+{
+    "name": "Omnilatent.ScenesManager.Editor",
+    "rootNamespace": "",
+    "references": [
+        "GUID:b8c861c075928d54887a1626e6ab827d"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

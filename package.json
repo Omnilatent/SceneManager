@@ -1,0 +1,17 @@
+{
+    "name": "com.omnilatent.scenesmanager",
+    "displayName": "Omni Scenes Manager",
+    "version": "0.1.0",
+    "unity": "2018.1",
+    "description": "Manage scenes, pass data between scenes.",
+    "keywords": ["scene","manager"],
+    "category": "Utilities",
+    "dependencies": {
+		"com.omnilatent.simpleanimation": "0.0.1"
+    },
+    "author": {
+        "name": "Trong",
+        "email": "nguyentrong101094@gmail.com",
+        "url": "https://github.com/nguyentrong101094"
+  }
+}

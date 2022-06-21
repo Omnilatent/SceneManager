@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-namespace Omnilatent.ScenesManager
+namespace Omnilatent.ScenesManager.Editor
 {
     public class SceneCreatorWindow : EditorWindow
     {

@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Rendering.Universal;
 using UnityEngine.UI;
 
 namespace Omnilatent.ScenesManager
@@ -89,10 +88,12 @@ namespace Omnilatent.ScenesManager
                 m_Canvas.worldCamera = Manager.Object.UICamera;
             }
 
+#if USING_URP
             if (Camera != null)
             {
-                Camera.GetComponent<UniversalAdditionalCameraData>().cameraStack.Add(Manager.Object.UICamera);
+                Camera.GetComponent<UnityEngine.Rendering.Universal.UniversalAdditionalCameraData>().cameraStack.Add(Manager.Object.UICamera);
             }
+#endif
         }
 
         /// <summary>
