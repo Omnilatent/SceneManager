@@ -132,6 +132,7 @@ namespace Omnilatent.ScenesManager
         {
             if (interSceneDatas.ContainsKey(sceneName))
             {
+                Debug.LogWarning("A scene data for this scene already exist. This might lead to errors. Did you load 1 scene multiple times?");
                 interSceneDatas[sceneName] = sceneData;
             }
             else interSceneDatas.Add(sceneName, sceneData);
