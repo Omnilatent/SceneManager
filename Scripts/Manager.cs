@@ -132,7 +132,7 @@ namespace Omnilatent.ScenesManager
         {
             if (interSceneDatas.ContainsKey(sceneName))
             {
-                Debug.LogWarning("A scene data for this scene already exist. This might lead to errors. Did you load 1 scene multiple times?");
+                Debug.LogWarning($"A scene data for scene '{sceneName}' already exist. This might lead to errors. Did you load 1 scene multiple times?");
                 interSceneDatas[sceneName] = sceneData;
             }
             else interSceneDatas.Add(sceneName, sceneData);
@@ -149,19 +149,6 @@ namespace Omnilatent.ScenesManager
             return sceneData;
         }
 
-        /// <summary>
-        /// Fade out current scene and load new scene. Call <see cref="OnFadedOut()"/> after scene is faded out.
-        /// </summary>
-        /// <param name="data">Data pass to new scene</param>
-        public static void Load(string sceneName, object data = null)
-        {
-            loadingSceneAsync = false;
-            m_MainSceneName = sceneName;
-            Object.FadeOutScene();
-            SceneData sceneData = new SceneData(data, null, null, LoadSceneMode.Single);
-            AddSceneData(sceneName, sceneData);
-        }
-
         public static void Add(string sceneName, object data = null, Action onShown = null, Action onHidden = null)
         {
             Object.ShieldOn();
@@ -171,9 +158,24 @@ namespace Omnilatent.ScenesManager
             SceneManager.LoadScene(sceneName, LoadSceneMode.Additive);
         }
 
+        /// <summary>
+        /// Fade out current scene and load new scene. Call <see cref="OnFadedOut()"/> after scene is faded out.
+        /// </summary>
+        /// <param name="data">Data pass to new scene</param>
+        public static void Load(string sceneName, object data = null)
+        {
+            loadingSceneAsync = false;
+            interSceneDatas.Clear();
+            SceneData sceneData = new SceneData(data, null, null, LoadSceneMode.Single);
+            AddSceneData(sceneName, sceneData);
+            m_MainSceneName = sceneName;
+            Object.FadeOutScene();
+        }
+
         public static async void LoadAsync(string sceneName, object data = null, Action onSceneLoaded = null, Action<float> onProgressUpdate = null)
         {
             loadingSceneAsync = true;
+            interSceneDatas.Clear();
             SceneData sceneData = new SceneData(data, null, null, LoadSceneMode.Single);
             AddSceneData(sceneName, sceneData);
             loadSceneOperation = SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Single);
