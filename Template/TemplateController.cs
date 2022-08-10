@@ -1,5 +1,4 @@
 using Omnilatent.ScenesManager;
-using Omnilatent.ScenesManager.Samples;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
