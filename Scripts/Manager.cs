@@ -68,7 +68,11 @@ namespace Omnilatent.ScenesManager
             SceneFadeDuration = 0.15f;
             SceneAnimationDuration = 0.283f;
 
-            Object = ((GameObject)GameObject.Instantiate(Resources.Load("ManagerObject"))).GetComponent<ManagerObject>();
+            string managerObjectName = "ManagerObject";
+#if USING_URP
+            managerObjectName = "ManagerObjectURP";
+#endif
+            Object = ((GameObject)GameObject.Instantiate(Resources.Load(managerObjectName))).GetComponent<ManagerObject>();
         }
 
         private static void OnUnitySceneLoaded(Scene scene, LoadSceneMode mode)
