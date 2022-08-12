@@ -39,7 +39,7 @@ namespace Omnilatent.ScenesManager.Editor
             Debug.Log("Cleared!");
         }*/
 
-        [MenuItem("Tools/Omnilatent/Scenes Manager/Generate Scene")]
+        [MenuItem("Tools/Omnilatent/Scenes Manager/Generate Scene", priority = 0)]
         public static void ShowWindow()
         {
             SceneCreatorWindow win = ScriptableObject.CreateInstance<SceneCreatorWindow>();
