@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Omnilatent.LoadingUtils
+namespace Omnilatent.Utils
 {
     public class LoadingScreen : MonoBehaviour, ILoadingScreen
     {

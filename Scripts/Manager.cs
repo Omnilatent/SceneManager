@@ -57,6 +57,7 @@ namespace Omnilatent.ScenesManager
         static AsyncOperation loadSceneOperation;
         //static Action<AsyncOperation> onNextSceneAsyncLoaded;
         //static Action<float> onSceneLoadProgressUpdate;
+        public const string resourcePath = "ScenesManager";
 
         static Manager()
         {
@@ -72,7 +73,7 @@ namespace Omnilatent.ScenesManager
 #if USING_URP
             managerObjectName = "ManagerObjectURP";
 #endif
-            Object = ((GameObject)GameObject.Instantiate(Resources.Load(managerObjectName))).GetComponent<ManagerObject>();
+            Object = ((GameObject)GameObject.Instantiate(Resources.Load(System.IO.Path.Combine(resourcePath, managerObjectName)))).GetComponent<ManagerObject>();
         }
 
         private static void OnUnitySceneLoaded(Scene scene, LoadSceneMode mode)

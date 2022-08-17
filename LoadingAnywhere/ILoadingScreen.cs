@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Omnilatent.LoadingUtils
+namespace Omnilatent.Utils
 {
     public interface ILoadingScreen
     {

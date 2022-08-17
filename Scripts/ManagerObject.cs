@@ -53,7 +53,7 @@ namespace Omnilatent.ScenesManager
             DontDestroyOnLoad(gameObject);
             if (createPersistentEventSystem)
             {
-                EventSystem prefab = Resources.Load<EventSystem>("PersistentEventSystem");
+                EventSystem prefab = Resources.Load<EventSystem>(System.IO.Path.Combine(Manager.resourcePath, "PersistentEventSystem"));
                 var eventSystem = Instantiate(prefab);
                 DontDestroyOnLoad(eventSystem.gameObject);
             }

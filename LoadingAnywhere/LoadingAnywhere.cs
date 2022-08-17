@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
-namespace Omnilatent.LoadingUtils
+namespace Omnilatent.Utils
 {
     public class LoadingAnywhere
     {
@@ -13,7 +13,7 @@ namespace Omnilatent.LoadingUtils
 
         static bool isInitialized;
 
-        static float minimumLoadTime = .6f;
+        static float minimumLoadTime = 0f;
         public static float MinimumLoadTime { get => minimumLoadTime; set => minimumLoadTime = value; }
 
         static bool loading = false;
@@ -27,6 +27,7 @@ namespace Omnilatent.LoadingUtils
                 var loadingScreenObject = MonoBehaviour.Instantiate(prefab);
                 loadingScreenCached = loadingScreenObject.GetComponent<ILoadingScreen>();
                 loadingScreenObject.SetActive(false);
+                MonoBehaviour.DontDestroyOnLoad(loadingScreenObject);
                 isInitialized = true;
             }
         }
