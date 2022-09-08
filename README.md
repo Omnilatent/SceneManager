@@ -3,9 +3,8 @@
 - Simple Animation: https://github.com/JacatGameStudio/SimpleAnimation
 
 # Setup
-- Import Extra package: go to "Tools/Omnilatent/Scenes Manager/Import Extra Package"* or import the package "ScenesManagerExtra" included in the asset.
-
-\*In case the project use URP, use "Tools/Omnilatent/Scenes Manager/Import Extra Package URP" instead.
+- Import Extra package: go to "Tools/Omnilatent/Scenes Manager/Import Extra Package" or import the package "ScenesManagerExtra" included in the asset.
+- In case the project use URP, go to "Tools/Omnilatent/Scenes Manager/Import Extra Package URP" to import additional Manager Object specifically made for URP.
 
 # Usage
 ## Create new scene
