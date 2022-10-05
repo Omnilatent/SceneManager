@@ -143,7 +143,10 @@ namespace Omnilatent.ScenesManager
             if (sceneAnimation == null)
             {
                 sceneAnimation = GetComponentInChildren<SceneAnimation>();
-                Debug.Log($"Auto assign SceneAnimation '{sceneAnimation.gameObject.name}' to '{name}'");
+                if (sceneAnimation != null)
+                {
+                    Debug.Log($"Auto assign SceneAnimation '{sceneAnimation.gameObject.name}' to '{name}'");
+                }
             }
         }
     }
