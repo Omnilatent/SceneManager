@@ -23,6 +23,7 @@ namespace Omnilatent.ScenesManager.Editor
         public string sceneDirectoryPath;
         public string sceneTemplateFile;
         public bool fullScreen;
+        public bool addSceneToBuild;
 
         string scenePath;
         string controllerPath;
@@ -45,9 +46,10 @@ namespace Omnilatent.ScenesManager.Editor
             SceneCreatorWindow win = ScriptableObject.CreateInstance<SceneCreatorWindow>();
 
             win.minSize = new Vector2(400, 200);
-            win.maxSize = new Vector2(400, 200);
+            win.maxSize = new Vector2(600, 300);
 
             win.fullScreen = true;
+            win.addSceneToBuild = true;
 
             win.ResetParams();
             win.ShowUtility();
@@ -63,7 +65,7 @@ namespace Omnilatent.ScenesManager.Editor
         void LoadPrefs()
         {
             sceneDirectoryPath = EditorPrefs.GetString(prefSceneFilePath, "Scenes/");
-            sceneTemplateFile = EditorPrefs.GetString(prefSceneTemplateFile, "TemplateScene.unity");
+            sceneTemplateFile = EditorPrefs.GetString(prefSceneTemplateFile, "Template.unity");
         }
 
         void SavePrefs()
@@ -79,6 +81,7 @@ namespace Omnilatent.ScenesManager.Editor
             sceneDirectoryPath = EditorGUILayout.TextField("Scene Directory Path", sceneDirectoryPath);
             sceneTemplateFile = EditorGUILayout.TextField("Scene Template File", sceneTemplateFile);
             fullScreen = EditorGUILayout.Toggle("Fullscreen", fullScreen);
+            addSceneToBuild = EditorGUILayout.Toggle("Add to build", addSceneToBuild);
 
             switch (state)
             {
@@ -120,7 +123,8 @@ namespace Omnilatent.ScenesManager.Editor
                         SaveScene();
                         state = State.ASK;
 
-                        if (EditorUtility.DisplayDialog("Successful!", "Scene was generated. Do you want to add it to Build Settings", "Yes", "No"))
+                        //if (EditorUtility.DisplayDialog("Successful!", "Scene was generated. Do you want to add it to Build Settings", "Yes", "No")) //Removed because of error
+                        if (addSceneToBuild)
                         {
                             state = State.YES;
                         }
