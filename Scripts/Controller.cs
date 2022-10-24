@@ -91,7 +91,8 @@ namespace Omnilatent.ScenesManager
 #if USING_URP
             if (Camera != null)
             {
-                Camera.GetComponent<UnityEngine.Rendering.Universal.UniversalAdditionalCameraData>().cameraStack.Add(Manager.Object.UICamera);
+                var uniCam = UnityEngine.Rendering.Universal.CameraExtensions.GetUniversalAdditionalCameraData(Camera);
+                uniCam.cameraStack.Add(Manager.Object.UICamera);
             }
 #endif
         }
