@@ -80,6 +80,12 @@ namespace Omnilatent.ScenesManager
         {
             var data = GetSceneData(scene.name, true);
             data.scene = scene;
+            if (string.IsNullOrEmpty(m_MainSceneName))
+            {
+                //This is first loaded scene, set it as main controller
+                m_MainSceneName = scene.name;
+                m_MainController = GetController(scene);
+            }
         }
 
         public static void OnSceneLoaded(Controller sender)
@@ -262,6 +268,10 @@ namespace Omnilatent.ScenesManager
 
         public static void Close(Controller sender)
         {
+            if (sender == m_MainController)
+            {
+                Debug.Log("Only added scene can be closed."); return;
+            }
             m_ControllerList.Remove(sender);
             Object.ShieldOn();
             sender.Hide();
@@ -280,6 +290,20 @@ namespace Omnilatent.ScenesManager
         {
             interSceneDatas.Remove(controller.SceneName());
             SceneManager.UnloadSceneAsync(controller.SceneData.scene);
+        }
+
+        static Controller GetController(Scene scene)
+        {
+            var roots = scene.GetRootGameObjects();
+            for (int i = 0; i < roots.Length; i++)
+            {
+                var controller = roots[i].GetComponent<Controller>();
+                if (controller != null)
+                {
+                    return controller;
+                }
+            }
+            return null;
         }
     }
 }
