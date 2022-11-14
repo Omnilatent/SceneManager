@@ -33,14 +33,14 @@ namespace Omnilatent.ScenesManager
             Init();
             gameObject.SetActive(true);
             m_Image.color = startColor;
-            m_Image.DOColor(endColor, Manager.SceneFadeDuration);
+            m_Image.DOColor(endColor, Manager.SceneFadeDuration).SetUpdate(true);
         }
 
         public void Hide()
         {
             Init();
             m_Image.color = endColor;
-            m_Image.DOColor(startColor, Manager.SceneFadeDuration).OnComplete(OnFadeComplete);
+            m_Image.DOColor(startColor, Manager.SceneFadeDuration).SetUpdate(true).OnComplete(OnFadeComplete);
         }
 
         private void OnFadeComplete()
