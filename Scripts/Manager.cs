@@ -183,7 +183,7 @@ namespace Omnilatent.ScenesManager
             Object.FadeOutScene();
         }
 
-        public static async void LoadAsync(string sceneName, object data = null, Action onSceneLoaded = null, Action<float> onProgressUpdate = null)
+        public static async void LoadAsync(string sceneName, object data = null, Action onSceneLoaded = null, Action<float> onProgressUpdate = null, int minimumLoadTimeMilisec = 0)
         {
             loadingSceneAsync = true;
             interSceneDatas.Clear();
@@ -197,6 +197,7 @@ namespace Omnilatent.ScenesManager
                 onProgressUpdate?.Invoke(loadSceneOperation.progress);
                 await Task.Delay(20);
             }
+            if (minimumLoadTimeMilisec > 0) { await Task.Delay(minimumLoadTimeMilisec); }
             OnSceneAsyncLoaded(sceneName, loadSceneOperation, onSceneLoaded);
         }
 
