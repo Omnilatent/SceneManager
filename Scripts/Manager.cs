@@ -222,7 +222,6 @@ namespace Omnilatent.ScenesManager
             if (loadingSceneAsync)
             {
                 loadSceneOperation.allowSceneActivation = true;
-                loadSceneOperation = null;
                 loadingSceneAsync = false;
             }
             else
