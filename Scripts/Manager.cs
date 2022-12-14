@@ -185,6 +185,10 @@ namespace Omnilatent.ScenesManager
 
         public static async void LoadAsync(string sceneName, object data = null, Action onSceneLoaded = null, Action<float> onProgressUpdate = null, int minimumLoadTimeMilisec = 0)
         {
+            if (loadingSceneAsync)
+            {
+                Debug.LogException(new Exception("Loading multiple scenes async at the same time is not supported."));
+            }
             loadingSceneAsync = true;
             interSceneDatas.Clear();
             SceneData sceneData = new SceneData(data, null, null, LoadSceneMode.Single);
