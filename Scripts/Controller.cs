@@ -9,14 +9,27 @@ namespace Omnilatent.ScenesManager
     public abstract class Controller : MonoBehaviour
     {
         [SerializeField] SceneAnimation sceneAnimation;
-        [SerializeField] protected Canvas m_Canvas;
-        public Canvas Canvas { get => m_Canvas; set => m_Canvas = value; }
+        [Tooltip("Deprecated, use Canvases instead")]
+        [SerializeField] protected Canvas canvas;
+        public Canvas Canvas
+        {
+            get => canvases[0]; set
+            {
+                if (Canvases == null) { Canvases = new List<Canvas>(); }
+                if (Canvases.Count == 0) { Canvases.Add(value); }
+                else { Canvases[0] = value; }
+            }
+        }
+
+        [SerializeField] protected List<Canvas> canvases = new List<Canvas>();
+        public List<Canvas> Canvases { get => canvases; set => canvases = value; }
 
         [SerializeField] protected Camera m_Camera;
         public Camera Camera { get => m_Camera; set => m_Camera = value; }
 
         Manager.SceneData sceneData;
         public Manager.SceneData SceneData { get => sceneData; set => sceneData = value; }
+
         GameObject m_Shield;
 
         protected virtual void Awake()
@@ -53,7 +66,7 @@ namespace Omnilatent.ScenesManager
 
         public void CreateShield()
         {
-            if (m_Shield == null && m_Canvas.sortingOrder > 0)
+            if (m_Shield == null && Canvas.sortingOrder > 0)
             {
                 m_Shield = new GameObject("Shield");
                 m_Shield.layer = LayerMask.NameToLayer("UI");
@@ -62,7 +75,7 @@ namespace Omnilatent.ScenesManager
                 image.color = Manager.ShieldColor;
 
                 Transform t = m_Shield.transform;
-                t.SetParent(m_Canvas.transform);
+                t.SetParent(Canvas.transform);
                 t.SetSiblingIndex(0);
                 t.localScale = Vector3.one;
                 t.localPosition = new Vector3(t.localPosition.x, t.localPosition.y, 0);
@@ -78,15 +91,35 @@ namespace Omnilatent.ScenesManager
 
         public void SetupCanvas(int sortingOrder)
         {
-            if (m_Canvas == null)
+            if (canvas != null)
             {
-                m_Canvas = transform.GetComponentInChildren<Canvas>(true);
+                Debug.LogError($"{SceneName()}: Field 'Canvas' has been deprecated. Set reference to scene's canvas in 'Canvases' instead.");
             }
-            if (m_Canvas.worldCamera == null)
+
+            if (Canvases.Count == 0)
             {
-                m_Canvas.sortingOrder = sortingOrder;
-                m_Canvas.worldCamera = Manager.Object.UICamera;
+                Canvases.AddRange(transform.GetComponentsInChildren<Canvas>(true));
             }
+            for (int i = 0; i < Canvases.Count; i++)
+            {
+                if (Canvases[i].worldCamera == null)
+                {
+                    if (Canvases[i].sortingOrder == 0)
+                    {
+                        Canvases[i].sortingOrder = sortingOrder;
+                    }
+                    Canvases[i].worldCamera = Manager.Object.UICamera;
+                }
+            }
+            /*if (Canvas == null)
+            {
+                Canvas = transform.GetComponentInChildren<Canvas>(true);
+            }
+            if (Canvas.worldCamera == null)
+            {
+                Canvas.sortingOrder = sortingOrder;
+                Canvas.worldCamera = Manager.Object.UICamera;
+            }*/
 
 #if USING_URP
             if (Camera != null)
