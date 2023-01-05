@@ -59,6 +59,12 @@ namespace Omnilatent.ScenesManager
         //static Action<float> onSceneLoadProgressUpdate;
         public const string resourcePath = "ScenesManager";
 
+        public delegate void SceneChangeStartDelegate(string targetSceneName);
+        public delegate void SceneChangedDelegate(Controller sender);
+        public static SceneChangeStartDelegate onSceneLoadStart;
+        public static SceneChangedDelegate onSceneLoaded;
+        public static SceneChangedDelegate onSceneHidden;
+
         static Manager()
         {
             Application.targetFrameRate = 60;
@@ -128,6 +134,7 @@ namespace Omnilatent.ScenesManager
 
                 // Fade
                 Object.FadeInScene();
+                onSceneLoaded?.Invoke(sender);
             }
             else
             {
@@ -181,6 +188,7 @@ namespace Omnilatent.ScenesManager
             AddSceneData(sceneName, sceneData);
             m_MainSceneName = sceneName;
             Object.FadeOutScene();
+            onSceneLoadStart?.Invoke(sceneName);
         }
 
         public static async void LoadAsync(string sceneName, object data = null, Action onSceneLoaded = null, Action<float> onProgressUpdate = null, int minimumLoadTimeMilisec = 0)
@@ -193,6 +201,7 @@ namespace Omnilatent.ScenesManager
             interSceneDatas.Clear();
             SceneData sceneData = new SceneData(data, null, null, LoadSceneMode.Single);
             AddSceneData(sceneName, sceneData);
+            onSceneLoadStart?.Invoke(sceneName);
             loadSceneOperation = SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Single);
             loadSceneOperation.allowSceneActivation = false;
             //loadSceneOperation.completed += (AsyncOperation asyncOp) => { OnSceneAsyncLoaded(sceneName, asyncOp, onSceneLoaded); };
@@ -285,6 +294,7 @@ namespace Omnilatent.ScenesManager
         {
             sender.OnHidden();
             sender.SceneData.onHidden?.Invoke();
+            onSceneHidden?.Invoke(sender);
             Unload(sender);
             TopController().OnReFocus();
             Object.ShieldOff();
