@@ -10,7 +10,7 @@ namespace Omnilatent.ScenesManager
     {
         [SerializeField] SceneAnimation sceneAnimation;
         [Tooltip("Deprecated, use Canvases instead")]
-        [SerializeField] protected Canvas canvas;
+        [SerializeField] protected Canvas m_Canvas;
         public Canvas Canvas
         {
             get => canvases[0]; set
@@ -91,10 +91,12 @@ namespace Omnilatent.ScenesManager
 
         public void SetupCanvas(int sortingOrder)
         {
-            if (canvas != null)
+#if UNITY_EDITOR
+            if (m_Canvas != null)
             {
                 Debug.LogError($"{SceneName()}: Field 'Canvas' has been deprecated. Set reference to scene's canvas in 'Canvases' instead.");
             }
+#endif
 
             if (Canvases.Count == 0)
             {
