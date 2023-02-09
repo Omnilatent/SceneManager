@@ -27,10 +27,10 @@ namespace Omnilatent.ScenesManager
         [SerializeField] protected Camera m_Camera;
         public Camera Camera { get => m_Camera; set => m_Camera = value; }
 
-        Manager.SceneData sceneData;
+        protected Manager.SceneData sceneData;
         public Manager.SceneData SceneData { get => sceneData; set => sceneData = value; }
 
-        GameObject m_Shield;
+        protected GameObject m_Shield;
 
         protected virtual void Awake()
         {
