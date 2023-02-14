@@ -72,11 +72,11 @@ namespace Omnilatent.Utils
                 }
                 loadingScreenToHide = currentLoadingScreen;
             }
-            else
+            else if (!cachedLoadingScreens.TryGetValue(_prefabPath, out loadingScreenToHide))
             {
-                loadingScreenToHide = cachedLoadingScreens[_prefabPath];
+                Debug.LogWarning($"cachedLoadingScreens does not contain key '{_prefabPath}'. Check if the loading screen has been initialized.");
             }
-            loadingScreenToHide.Hide();
+            loadingScreenToHide?.Hide();
             loading = false;
         }
     }
