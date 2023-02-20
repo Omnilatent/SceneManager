@@ -224,7 +224,7 @@ namespace Omnilatent.ScenesManager.Editor
                 DestroyImmediate(c);
             }
 
-            var canvas = c.Canvas;
+            var canvases = c.Canvases;
             var camera = c.Camera;
 
             var type = GetAssemblyType(sceneName + "Controller");
@@ -232,9 +232,9 @@ namespace Omnilatent.ScenesManager.Editor
 
             c = go.GetComponent<Controller>();
 
-            c.Canvas = canvas;
+            c.Canvases = canvases;
             c.Camera = camera;
-            //c.FullScreen = fullScreen;
+            // c.FullScreen = fullScreen;
 
             AssetDatabase.ImportAsset(controllerPath);
         }
