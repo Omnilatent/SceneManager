@@ -1,6 +1,6 @@
 ﻿
 # Dependencies
-- Simple Animation: https://github.com/JacatGameStudio/SimpleAnimation
+- Simple Animation: https://gitlab.volio.vn/jacat-tech/SimpleAnimation
 
 # Setup
 - Import Extra package: go to "Tools/Omnilatent/Scenes Manager/Import Extra Package" or import the package "ScenesManagerExtra" included in the asset.
