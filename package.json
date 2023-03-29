@@ -6,9 +6,6 @@
     "description": "Manage scenes, pass data between scenes.",
     "keywords": ["scene","manager"],
     "category": "Utilities",
-    "dependencies": {
-		"com.omnilatent.simpleanimation": "https://gitlab.volio.vn/jacat-tech/SimpleAnimation.git"
-    },
     "author": {
         "name": "Trong",
         "email": "nguyentrong101094@gmail.com",
