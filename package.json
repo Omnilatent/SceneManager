@@ -7,7 +7,7 @@
     "keywords": ["scene","manager"],
     "category": "Utilities",
     "dependencies": {
-		"com.omnilatent.simpleanimation": "0.0.1"
+		"com.omnilatent.simpleanimation": "https://gitlab.volio.vn/jacat-tech/SimpleAnimation.git"
     },
     "author": {
         "name": "Trong",
