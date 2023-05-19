@@ -67,7 +67,7 @@ namespace Omnilatent.Utils
             {
                 if (currentLoadingScreen == null)
                 {
-                    Debug.LogError("Hide failed. No loading screen is showing.");
+                    Debug.LogWarning("Hide failed. No loading screen is showing.");
                     return;
                 }
                 loadingScreenToHide = currentLoadingScreen;
