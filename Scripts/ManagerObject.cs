@@ -41,6 +41,12 @@ namespace Omnilatent.ScenesManager
 
         [SerializeField] GameObject m_BgCamera;
         [SerializeField] Camera m_UiCamera;
+        
+        [Tooltip("When a scene is added, increase its canvas's sorting order by this amount so it's on top of older scenes")]
+        [SerializeField] private int _layerSortOrderAddedEachCanvas = 10;
+
+        public int LayerSortOrderAddedEachCanvas => _layerSortOrderAddedEachCanvas;
+        
         bool createPersistentEventSystem = true;
 
         public Camera UICamera

@@ -171,7 +171,7 @@ namespace Omnilatent.ScenesManager
         {
             Object.ShieldOn();
             SceneData sceneData = new SceneData(data, onShown, onHidden, LoadSceneMode.Additive);
-            sceneData.SetCanvasSortOrder(GetTopSceneSortOrder() + 1);
+            sceneData.SetCanvasSortOrder(GetTopSceneSortOrder() + Object.LayerSortOrderAddedEachCanvas);
             AddSceneData(sceneName, sceneData);
             SceneManager.LoadScene(sceneName, LoadSceneMode.Additive);
         }
