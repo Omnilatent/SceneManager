@@ -44,6 +44,14 @@ namespace Omnilatent.ScenesManager
         static string m_MainSceneName;
         static Controller m_MainController;
 
+        /// <summary>
+        /// Get current active main scene controller
+        /// </summary>
+        public static Controller MainController
+        {
+            get => m_MainController;
+        }
+
         static float sceneFadeDuration;
         public static float SceneFadeDuration { get => sceneFadeDuration; set => sceneFadeDuration = value; }
 
