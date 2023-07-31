@@ -67,3 +67,21 @@ If you want to use the scene's camera instead of BG Camera, inspect the scene co
 When an addictive scene is added using Manager.Add(), a shield will be placed on top of the main scene, darkened it and block interaction with the main scene's UI.
 
 The shield's color can be customized using Manager.ShieldColor property. E.g: `Manager.ShieldColor = new Color(0f,0f,0.5f,0.5f);`.
+
+## Common issues
+
+#### After using Manager.Load(sceneName, data), a scene is loaded but the UI is hidden.
+
+This could be due to 2 reasons:
+
+1. The object Animation's scale is (0,0,0).
+
+Fix: Check the object "Animation" 's Simple Anim Scale component, in the Inspector, click on 'Advanced', uncheck 'Hide on Awake' so that the object's scale won't be set to (0,0,0) on Awake.
+
+2. The Canvas's layer is set to Default.
+
+Fix: By default, Scene Manager's UI Camera only render the layer 'UI'. To fix this, set the Canvas's layer to UI. (The object Layer, not the Sorting Layer). 
+
+#### After using Manager.Add(sceneName, data), the scene Animation does not play.
+
+Fix: Scene animation is powered by Simple Animation by default. It requires the scene controller component to has reference to a Scene Animation component, otherwise it will skip the animation functions. Check the template scene 'PopupTemplate' to see how to setup the scene to have animation. 
