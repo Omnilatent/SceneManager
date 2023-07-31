@@ -330,7 +330,7 @@ MonoBehaviour:
   timeDuration: 0.3
   timeDelay: 0
   triggerAnim: 0
-  hideOnAwake: 1
+  hideOnAwake: 0
   ignoreTimeScale: 0
   scaleStart: 0
   scaleEnd: 1
