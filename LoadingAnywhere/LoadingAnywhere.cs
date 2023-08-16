@@ -78,6 +78,7 @@ namespace Omnilatent.Utils
             }
             loadingScreenToHide?.Hide();
             loading = false;
+            currentLoadingScreen = null;
         }
     }
 }
