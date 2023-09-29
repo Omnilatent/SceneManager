@@ -1,4 +1,11 @@
-﻿# 1.0.0
+﻿# 1.1.0
+Potential breaking changes/fixes:
+- Change to Manager.Unload(Controller controller) & Manager.OnHidden(Controller sender): the unloading scene's data will be removed from interSceneDatas before calling Controller.OnHidden() to fix issue with showing the same scene during previous scene's OnHidden().
+
+Fixes:
+- Fix loading anywhere start coroutine error when trying to hide a loading screen and no loading screen is showing
+
+# 1.0.0
 News:
 - Add Popup template scene. Move template scene to FullScene folder.
 - Add getter for active main controller.

@@ -300,6 +300,7 @@ namespace Omnilatent.ScenesManager
 
         public static void OnHidden(Controller sender)
         {
+            interSceneDatas.Remove(sender.SceneName());
             sender.OnHidden();
             sender.SceneData.onHidden?.Invoke();
             onSceneHidden?.Invoke(sender);
@@ -310,7 +311,6 @@ namespace Omnilatent.ScenesManager
 
         static void Unload(Controller controller)
         {
-            interSceneDatas.Remove(controller.SceneName());
             SceneManager.UnloadSceneAsync(controller.SceneData.scene);
         }
 
