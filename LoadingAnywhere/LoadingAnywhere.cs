@@ -9,7 +9,7 @@ namespace Omnilatent.Utils
     {
         //static ILoadingScreen loadingScreenCached;
 
-        const string defaultPrefabPath = "LoadingScreen";
+        public const string defaultPrefabPath = "LoadingScreen";
 
         static float minimumLoadTime = 0f;
         public static float MinimumLoadTime { get => minimumLoadTime; set => minimumLoadTime = value; }
