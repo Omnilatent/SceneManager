@@ -30,7 +30,7 @@ namespace Omnilatent.ScenesManager
         protected Manager.SceneData sceneData;
         public Manager.SceneData SceneData { get => sceneData; set => sceneData = value; }
 
-        protected GameObject m_Shield;
+        [SerializeField] protected SceneAnimation m_Shield;
 
         protected virtual void Awake()
         {
@@ -66,26 +66,33 @@ namespace Omnilatent.ScenesManager
 
         public void CreateShield()
         {
-            if (m_Shield == null && Canvas.sortingOrder > 0)
+            if (Canvas.sortingOrder > 0)
             {
-                m_Shield = new GameObject("Shield");
-                m_Shield.layer = LayerMask.NameToLayer("UI");
+                if (m_Shield == null)
+                {
+                    var m_ShieldObj = new GameObject("Shield");
+                    m_ShieldObj.layer = LayerMask.NameToLayer("UI");
 
-                Image image = m_Shield.AddComponent<Image>();
-                image.color = Manager.ShieldColor;
+                    var m_ShieldImg = m_ShieldObj.AddComponent<Image>();
+                    m_ShieldImg.color = Manager.ShieldColor;
 
-                Transform t = m_Shield.transform;
-                t.SetParent(Canvas.transform);
-                t.SetSiblingIndex(0);
-                t.localScale = Vector3.one;
-                t.localPosition = new Vector3(t.localPosition.x, t.localPosition.y, 0);
+                    Transform t = m_ShieldImg.transform;
+                    t.SetParent(Canvas.transform);
+                    t.SetSiblingIndex(0);
+                    t.localScale = Vector3.one;
+                    t.localPosition = new Vector3(t.localPosition.x, t.localPosition.y, 0);
 
-                RectTransform rt = t.GetComponent<RectTransform>();
-                rt.anchorMin = Vector2.zero;
-                rt.anchorMax = Vector2.one;
-                rt.pivot = new Vector2(0.5f, 0.5f);
-                rt.offsetMax = new Vector2(2, 2);
-                rt.offsetMin = new Vector2(-2, -2);
+                    RectTransform rt = t.GetComponent<RectTransform>();
+                    rt.anchorMin = Vector2.zero;
+                    rt.anchorMax = Vector2.one;
+                    rt.pivot = new Vector2(0.5f, 0.5f);
+                    rt.offsetMax = new Vector2(2, 2);
+                    rt.offsetMin = new Vector2(-2, -2);
+                }
+                else
+                {
+                    m_Shield.Show(null);
+                }
             }
         }
 
@@ -160,6 +167,7 @@ namespace Omnilatent.ScenesManager
             if (sceneAnimation != null)
                 sceneAnimation.Hide(OnEndHideAnim);
             else OnEndHideAnim();
+            if (m_Shield != null) { m_Shield.Hide(null); }
         }
 
         private void OnEndHideAnim()

@@ -13,7 +13,7 @@ namespace Omnilatent.ScenesManager
             SHIELD_OFF,
             SHIELD_ON,
             SHIELD_FADE_IN,
-            ShieldFadeOut,
+            SHIELD_FADE_OUT,
             SCENE_LOADING
         }
 
@@ -104,7 +104,7 @@ namespace Omnilatent.ScenesManager
                 {
                     ShieldActive = true;
                     sceneTransitionShield.Show();
-                    m_State = State.ShieldFadeOut;
+                    m_State = State.SHIELD_FADE_OUT;
                     StartCoroutine(CoFadeOutScene());
                 }
             }
