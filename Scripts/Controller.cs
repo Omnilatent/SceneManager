@@ -8,7 +8,7 @@ namespace Omnilatent.ScenesManager
 {
     public abstract class Controller : MonoBehaviour
     {
-        [SerializeField] SceneAnimation sceneAnimation;
+        [SerializeField] protected SceneAnimation sceneAnimation;
         [Tooltip("Deprecated, use Canvases instead")]
         [SerializeField] protected Canvas m_Canvas;
         public Canvas Canvas
