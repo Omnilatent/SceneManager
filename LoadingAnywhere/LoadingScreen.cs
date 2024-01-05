@@ -7,8 +7,14 @@ namespace Omnilatent.Utils
 {
     public class LoadingScreen : MonoBehaviour, ILoadingScreen
     {
-        [SerializeField] Slider loadingBar;
-        float timerLoad;
+        [SerializeField] protected Slider loadingBar;
+        
+        [Tooltip("If less than 0, use default minimum loading time set in LoadingAnywhere")]
+        [SerializeField] protected float minimumLoadingTime = -1f;
+
+        public float MinimumLoadingTime { get { return minimumLoadingTime >= 0f ? minimumLoadingTime : LoadingAnywhere.MinimumLoadTime; } }
+
+        protected float timerLoad;
 
         public float GetProgress()
         {
@@ -33,7 +39,7 @@ namespace Omnilatent.Utils
 
         IEnumerator CoHide()
         {
-            while (timerLoad < LoadingAnywhere.MinimumLoadTime)
+            while (timerLoad < MinimumLoadingTime)
             {
                 yield return 0;
             }
