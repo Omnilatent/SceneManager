@@ -72,7 +72,8 @@ namespace Omnilatent.ScenesManager
             {
                 if (Manager.SceneFadeDuration == 0)
                 {
-                    ShieldOff();
+                    // ShieldOff();
+                    OnFadedIn();
                 }
                 else
                 {

@@ -249,6 +249,10 @@ namespace Omnilatent.ScenesManager
                 SceneManager.LoadScene(m_MainSceneName, LoadSceneMode.Single);
         }
 
+        /// <summary>
+        /// Called when a popup scene finish show animation
+        /// </summary>
+        /// <param name="controller"></param>
         public static void OnShown(Controller controller)
         {
             /*if (controller.FullScreen && m_ControllerStack.Count > 1)
