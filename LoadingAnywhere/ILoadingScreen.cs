@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -9,7 +10,7 @@ namespace Omnilatent.Utils
         float GetProgress();
         void SetProgress(float value);
         void Show();
-        void Hide();
+        void Hide(Action onHide = null);
         GameObject GetGameObject();
     }
 }

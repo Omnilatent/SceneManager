@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
@@ -55,7 +56,7 @@ namespace Omnilatent.Utils
             loading = true;
         }
 
-        public static void Hide(string _prefabPath = null)
+        public static void Hide(string _prefabPath = null, Action onHide = null)
         {
             /*if (!isInitialized)
             {
@@ -68,6 +69,7 @@ namespace Omnilatent.Utils
                 if (currentLoadingScreen == null)
                 {
                     Debug.LogWarning("Hide failed. No loading screen is showing.");
+                    onHide?.Invoke();
                     return;
                 }
                 loadingScreenToHide = currentLoadingScreen;
@@ -76,7 +78,16 @@ namespace Omnilatent.Utils
             {
                 Debug.LogWarning($"cachedLoadingScreens does not contain key '{_prefabPath}'. Check if the loading screen has been initialized.");
             }
-            loadingScreenToHide?.Hide();
+
+            if (loadingScreenToHide != null)
+            {
+                loadingScreenToHide.Hide(onHide);
+            }
+            else
+            {
+                onHide?.Invoke();
+            }
+
             loading = false;
             currentLoadingScreen = null;
         }

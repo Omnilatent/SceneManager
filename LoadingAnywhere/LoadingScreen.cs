@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -32,18 +33,19 @@ namespace Omnilatent.Utils
             gameObject.SetActive(true);
         }
 
-        public void Hide()
+        public void Hide(Action onHide = null)
         {
-            StartCoroutine(CoHide());
+            StartCoroutine(CoHide(onHide));
         }
 
-        IEnumerator CoHide()
+        IEnumerator CoHide(Action onHide)
         {
             while (timerLoad < MinimumLoadingTime)
             {
                 yield return 0;
             }
             gameObject.SetActive(false);
+            onHide?.Invoke();
         }
 
         public GameObject GetGameObject()
