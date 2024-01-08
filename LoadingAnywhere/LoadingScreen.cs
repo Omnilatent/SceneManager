@@ -35,6 +35,12 @@ namespace Omnilatent.Utils
 
         public void Hide(Action onHide = null)
         {
+            if (!gameObject.activeInHierarchy) //loading screen is already hidden
+            {
+                onHide?.Invoke();
+                return;
+            }
+
             StartCoroutine(CoHide(onHide));
         }
 
