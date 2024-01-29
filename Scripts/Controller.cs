@@ -98,12 +98,12 @@ namespace Omnilatent.ScenesManager
 
         public void SetupCanvas(int sortingOrder)
         {
-#if UNITY_EDITOR
+/*#if UNITY_EDITOR
             if (m_Canvas != null)
             {
                 Debug.LogError($"{SceneName()}: Field 'Canvas' has been deprecated. Set reference to scene's canvas in 'Canvases' instead.");
             }
-#endif
+#endif*/
 
             if (Canvases.Count == 0)
             {
@@ -191,6 +191,11 @@ namespace Omnilatent.ScenesManager
                 {
                     Debug.Log($"Auto assign SceneAnimation '{sceneAnimation.gameObject.name}' to '{name}'");
                 }
+            }
+            
+            if (m_Canvas != null)
+            {
+                Debug.LogError($"{SceneName()}: Field 'Canvas' has been deprecated. Set reference to scene's canvas in 'Canvases' instead.");
             }
         }
     }
