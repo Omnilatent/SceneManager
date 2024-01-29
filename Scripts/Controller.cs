@@ -9,8 +9,6 @@ namespace Omnilatent.ScenesManager
     public abstract class Controller : MonoBehaviour
     {
         [SerializeField] protected SceneAnimation sceneAnimation;
-        [Tooltip("Deprecated, use Canvases instead")]
-        [SerializeField] protected Canvas m_Canvas;
         public Canvas Canvas
         {
             get => canvases[0]; set
@@ -31,6 +29,8 @@ namespace Omnilatent.ScenesManager
         public Manager.SceneData SceneData { get => sceneData; set => sceneData = value; }
 
         [SerializeField] protected SceneAnimation m_Shield;
+        [Tooltip("Deprecated, use Canvases instead")]
+        [SerializeField] protected Canvas m_Canvas;
 
         protected virtual void Awake()
         {
