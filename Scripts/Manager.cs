@@ -297,6 +297,9 @@ namespace Omnilatent.ScenesManager
             {
                 Debug.Log("Only added scene can be closed."); return;
             }
+
+            if (!m_ControllerList.Contains(sender)) { Debug.LogError($"Close failed. Scene {sender} is already closed, this can lead to error."); }
+
             m_ControllerList.Remove(sender);
             Object.ShieldOn();
             sender.Hide();
