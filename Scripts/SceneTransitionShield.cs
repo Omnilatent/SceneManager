@@ -1,4 +1,6 @@
+#if OMNILATENT_SIMPLE_ANIMATION
 using DG.Tweening;
+#endif
 using System;
 using System.Collections;
 using System.Collections.Generic;
