@@ -1,4 +1,24 @@
-﻿# 1.1.0
+﻿# 1.2.0
+News:
+- Loading screen: add action on hide parameter to Hide() function.
+- LoadingScreen: Add ability to set custom minimum loading time in prefab.
+- Scene animation: add toggle to allow skip show & hide animation.
+- Controller: allow customizable shield as SceneAnimation object (serialize field). 
+- Manager object: refactor enum ShieldFadeOut to SHIELD_FADE_OUT.
+
+Changes:
+- Log error if try to Close() a scene that was already hidden.
+- Check deprecated usage of field Canvas in OnValidate instead of during runtime.
+- change scene animation field from private to protected.
+- LoadingAnywhere: Change default prefab path to public.
+
+Fixes:
+- Scene transition shield: fix error when DG tween is not installed.
+- Fix scene transition shield not deactive correctly when not use Simple animation.
+- Fix loading screen break when call hide when it was already hidden.
+- Fix scene manager's OnShown not called when scene fade duration is 0.
+
+# 1.1.0
 Potential breaking changes/fixes:
 - Change to Manager.Unload(Controller controller) & Manager.OnHidden(Controller sender): the unloading scene's data will be removed from interSceneDatas before calling Controller.OnHidden() to fix issue with showing the same scene during previous scene's OnHidden().
 
