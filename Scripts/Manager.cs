@@ -71,7 +71,9 @@ namespace Omnilatent.ScenesManager
         public delegate void SceneChangedDelegate(Controller sender);
         public static SceneChangeStartDelegate onSceneLoadStart;
         public static SceneChangedDelegate onSceneLoaded;
-        public static SceneChangedDelegate onSceneHidden;
+        public static SceneChangedDelegate onSceneHidden;        
+        public static SceneChangedDelegate onSceneAdded;
+
 
         static Manager()
         {
@@ -148,6 +150,7 @@ namespace Omnilatent.ScenesManager
             {
                 // Popup Scene
                 sender.Show();
+                onSceneAdded?.Invoke(sender);
             }
         }
 
