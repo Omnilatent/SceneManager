@@ -18,6 +18,8 @@ namespace Omnilatent.Utils
         static bool loading = false;
         public static bool Loading { get => loading; }
 
+        // public static Dictionary<string, ILoadingScreen> CachedLoadingScreens => cachedLoadingScreens;
+
         static Dictionary<string, ILoadingScreen> cachedLoadingScreens = new Dictionary<string, ILoadingScreen>();
         static ILoadingScreen currentLoadingScreen;
 
@@ -91,5 +93,11 @@ namespace Omnilatent.Utils
             loading = false;
             currentLoadingScreen = null;
         }
+
+        public static ILoadingScreen GetCachedLoadingScreen(string prefabPath)
+        {
+            cachedLoadingScreens.TryGetValue(prefabPath, out var loadingScreen);
+            return loadingScreen;
+        } 
     }
 }
