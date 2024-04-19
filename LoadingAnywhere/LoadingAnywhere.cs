@@ -48,11 +48,11 @@ namespace Omnilatent.Utils
             }*/
         }
 
-        public static void Show(string _prefabPath = defaultPrefabPath)
+        public static void Show(string _prefabPath = defaultPrefabPath, Action onShown = null)
         {
             Init(_prefabPath);
             currentLoadingScreen = cachedLoadingScreens[_prefabPath];
-            currentLoadingScreen.Show();
+            currentLoadingScreen.Show(onShown);
             loading = true;
         }
 

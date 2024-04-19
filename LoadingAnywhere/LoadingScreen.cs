@@ -27,10 +27,11 @@ namespace Omnilatent.Utils
             loadingBar.value = value;
         }
 
-        public void Show()
+        public void Show(Action onShown = null)
         {
             timerLoad = 0f;
             gameObject.SetActive(true);
+            onShown?.Invoke();
         }
 
         public void Hide(Action onHide = null)

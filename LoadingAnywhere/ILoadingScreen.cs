@@ -9,7 +9,7 @@ namespace Omnilatent.Utils
     {
         float GetProgress();
         void SetProgress(float value);
-        void Show();
+        void Show(Action onShown = null);
         void Hide(Action onHide = null);
         GameObject GetGameObject();
     }
