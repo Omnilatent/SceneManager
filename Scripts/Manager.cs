@@ -138,6 +138,10 @@ namespace Omnilatent.ScenesManager
                         sender.Camera.gameObject.AddComponent<ActivateManagerCameraOnDestroy>();
                     }
                 }
+                else if (!Manager.Object.BgCamera.activeInHierarchy)
+                {
+                    Debug.LogWarning("Controller does not have camera and default camera is inactive. Add component 'ActivateManagerCameraOnDestroy' to custom camera to fix this.");
+                }
 
                 // Main Scene
                 m_MainController = sender;

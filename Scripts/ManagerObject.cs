@@ -54,6 +54,12 @@ namespace Omnilatent.ScenesManager
             get { return m_UiCamera; }
         }
 
+        public GameObject BgCamera
+        {
+            get => m_BgCamera;
+            set => m_BgCamera = value;
+        }
+
         private void Awake()
         {
             DontDestroyOnLoad(gameObject);
