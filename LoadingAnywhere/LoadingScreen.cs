@@ -9,9 +9,10 @@ namespace Omnilatent.Utils
     public class LoadingScreen : MonoBehaviour, ILoadingScreen
     {
         [SerializeField] protected Slider loadingBar;
-        
-        [Tooltip("If less than 0, use default minimum loading time set in LoadingAnywhere")]
-        [SerializeField] protected float minimumLoadingTime = -1f;
+        float _progress;
+
+        [Tooltip("If less than 0, use default minimum loading time set in LoadingAnywhere")] [SerializeField]
+        protected float minimumLoadingTime = -1f;
 
         public float MinimumLoadingTime { get { return minimumLoadingTime >= 0f ? minimumLoadingTime : LoadingAnywhere.MinimumLoadTime; } }
 
@@ -19,12 +20,14 @@ namespace Omnilatent.Utils
 
         public float GetProgress()
         {
-            return loadingBar.value;
+            return _progress;
         }
 
         public void SetProgress(float value)
         {
-            loadingBar.value = value;
+            _progress = value;
+            if (loadingBar != null)
+                loadingBar.value = _progress;
         }
 
         public void Show(Action onShown = null)
@@ -51,6 +54,7 @@ namespace Omnilatent.Utils
             {
                 yield return 0;
             }
+
             gameObject.SetActive(false);
             onHide?.Invoke();
         }
