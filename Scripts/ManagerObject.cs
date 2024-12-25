@@ -21,6 +21,7 @@ namespace Omnilatent.ScenesManager
         bool m_ShieldActive;
         State m_State;
         public State GetState() { return m_State; }
+
         public bool ShieldActive
         {
             get
@@ -41,13 +42,23 @@ namespace Omnilatent.ScenesManager
 
         [SerializeField] GameObject m_BgCamera;
         [SerializeField] Camera m_UiCamera;
-        
+
         [Tooltip("When a scene is added, increase its canvas's sorting order by this amount so it's on top of older scenes")]
-        [SerializeField] private int _layerSortOrderAddedEachCanvas = 10;
+        [SerializeField]
+        private int _layerSortOrderAddedEachCanvas = 10;
 
         public int LayerSortOrderAddedEachCanvas => _layerSortOrderAddedEachCanvas;
-        
+
         bool createPersistentEventSystem = true;
+
+        [Tooltip("Only run in editor, check all cameras to see if they are rendering the same layer as BG camera each time scene load.")]
+        [SerializeField]
+        private bool _checkCameraRenderSameLayer = true;
+
+        private float _cameraCheckInterval = 1f;
+        private float _nextCameraCheckTime;
+        private int _cameraCheckCount = 2;
+        private int _cameraCheckLeft;
 
         public Camera UICamera
         {
@@ -69,6 +80,8 @@ namespace Omnilatent.ScenesManager
                 var eventSystem = Instantiate(prefab);
                 DontDestroyOnLoad(eventSystem.gameObject);
             }
+
+            SetCameraCheck();
         }
 
         // Scene gradually appear
@@ -137,6 +150,7 @@ namespace Omnilatent.ScenesManager
         {
             m_State = State.SCENE_LOADING;
             Manager.OnFadedOut();
+            SetCameraCheck();
         }
 
         public void ShieldOn()
@@ -167,19 +181,23 @@ namespace Omnilatent.ScenesManager
 
         protected void Update()
         {
-#if UNITY_EDITOR || UNITY_ANDROID || UNITY_STANDALONE
+            #if UNITY_EDITOR || UNITY_ANDROID || UNITY_STANDALONE
             UpdateInput();
-#endif
+            #endif
+
+            #if UNITY_EDITOR
+            CheckDuplicateCamera();
+            #endif
         }
 
         void UpdateInput()
         {
-#if ENABLE_LEGACY_INPUT_MANAGER
+            #if ENABLE_LEGACY_INPUT_MANAGER
             if (Input.GetKeyDown(KeyCode.Escape))
-#else
+                #else
             if (Keyboard.current is Keyboard keyboard)
                 if (keyboard.escapeKey.wasPressedThisFrame)
-#endif
+                #endif
             {
                 if (!ShieldActive)
                 {
@@ -189,6 +207,46 @@ namespace Omnilatent.ScenesManager
                         controller.OnKeyBack();
                     }
                 }
+            }
+        }
+
+        void SetCameraCheck()
+        {
+            if (!_checkCameraRenderSameLayer) { return; }
+
+            _cameraCheckLeft = _cameraCheckCount;
+            _nextCameraCheckTime = Time.time + _cameraCheckInterval;
+        }
+
+        private void CheckDuplicateCamera()
+        {
+            if (_cameraCheckLeft > 0 && Time.time > _nextCameraCheckTime)
+            {
+                _cameraCheckLeft--;
+                _nextCameraCheckTime = Time.time + _cameraCheckInterval;
+                var sceneCams = FindObjectsOfType<Camera>();
+                if (sceneCams.Length == 0) { return; }
+
+                var bgCam = BgCamera.GetComponent<Camera>();
+                foreach (var sceneCam in sceneCams)
+                {
+                    if (!sceneCam.isActiveAndEnabled || sceneCam == bgCam) { continue; }
+
+                    if (bgCam.isActiveAndEnabled && sceneCam.isActiveAndEnabled)
+                    {
+                        if (AreCamerasRenderingSameLayer(sceneCam, bgCam))
+                        {
+                            Debug.LogWarning(
+                                $"ManagerObject's BG Camera and camera '{sceneCam.name}' are both rendering the same layer. This could affect performance.");
+                            _cameraCheckLeft = 0;
+                        }
+                    }
+                }
+            }
+
+            bool AreCamerasRenderingSameLayer(Camera cam1, Camera cam2)
+            {
+                return (cam1.cullingMask & cam2.cullingMask) != 0;
             }
         }
     }
