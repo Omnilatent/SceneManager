@@ -131,7 +131,7 @@ namespace Omnilatent.ScenesManager
                 // Own Camera
                 if (sender.Camera != null)
                 {
-                    Object.ToggleBackgroundCamera(false);
+                    // Object.ToggleBackgroundCamera(false);
 
                     if (sender.Camera.GetComponent<ActivateManagerCameraOnDestroy>() == null)
                     {
