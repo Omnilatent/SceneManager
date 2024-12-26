@@ -1,4 +1,17 @@
-﻿# 1.2.0
+﻿# 1.2.1
+New Features:
+- Add onSceneAdded event.
+- LoadingAnywhere: Add GetCachedLoadingScreen() function.
+- On scene load, check cameras if they render the same layers and give performance warning.
+- ActivateManagerCameraOnDestroy: disable ManagerObject's BG camera on Start so you can add this component to a scene camera without having to register it in scene controller.
+
+Changes:
+- API change: Added onShown callback to Show().
+- Update loading screen: remove rarely used slider component, improve default loading screen to a rotating circle. Restructure extra folder.
+- Update template scene's field canvas.
+- Log warning if Bg camera is not active and scene does not have any camera.
+
+# 1.2.0
 News:
 - Loading screen: add action on hide parameter to Hide() function.
 - LoadingScreen: Add ability to set custom minimum loading time in prefab.
